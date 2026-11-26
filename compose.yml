@@ -1,0 +1,66 @@
+name: ton-artifacts
+services:
+  api:
+    build: .
+    image: ton-artifacts:1
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - /opt/ton-artifacts/data:/data
+    ports:
+      - "127.0.0.1:18080:8000"
+    mem_limit: 384m
+    cpus: 0.75
+    pids_limit: 128
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,uid=10001,gid=10001
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    logging:
+      driver: json-file
+      options: {max-size: 5m, max-file: "2"}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 20s
+      timeout: 6s
+      retries: 3
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.artifact-platform.rule=Host(`artifacts.piyaphan-p.tech`) || Host(`auth.piyaphan-p.tech`) || Host(`mcp.piyaphan-p.tech`)
+      - traefik.http.routers.artifact-platform.entrypoints=websecure
+      - traefik.http.routers.artifact-platform.tls.certresolver=letsencrypt
+      - traefik.http.routers.artifact-platform.service=artifact-platform
+      - traefik.http.services.artifact-platform.loadbalancer.server.port=8000
+      - traefik.http.routers.artifact-callback.rule=HostRegexp(`^[a-z][a-z0-9-]+\.apps\.piyaphan-p\.tech$$`) && Path(`/_artifact/callback`)
+      - traefik.http.routers.artifact-callback.entrypoints=websecure
+      - traefik.http.routers.artifact-callback.tls=true
+      - traefik.http.routers.artifact-callback.priority=1000
+      - traefik.http.routers.artifact-callback.service=artifact-platform
+      - traefik.http.middlewares.artifact-auth.forwardauth.address=http://127.0.0.1:18080/internal/access
+      - traefik.http.middlewares.artifact-auth.forwardauth.trustForwardHeader=false
+      - traefik.http.middlewares.artifact-auth.forwardauth.authRequestHeaders=Cookie
+      - traefik.http.middlewares.artifact-auth.forwardauth.authResponseHeaders=X-Artifact-Actor
+  worker:
+    image: ton-artifacts:1
+    command: [python, -m, app.worker]
+    user: "0:0"
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      api: {condition: service_healthy}
+    volumes:
+      - /opt/ton-artifacts/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    mem_limit: 384m
+    cpus: 0.75
+    pids_limit: 128
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    cap_drop: [ALL]
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER]
+    security_opt: [no-new-privileges:true]
+    logging:
+      driver: json-file
+      options: {max-size: 5m, max-file: "2"}

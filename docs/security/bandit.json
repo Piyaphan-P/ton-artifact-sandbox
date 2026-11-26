@@ -1,0 +1,539 @@
+{
+  "errors": [],
+  "metrics": {
+    "_totals": {
+      "CONFIDENCE.HIGH": 6,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 14,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 7,
+      "SEVERITY.MEDIUM": 13,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 1197,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "app/__init__.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 0,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "app/admin.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 2,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 2,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 61,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "app/auth.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 2,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 2,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 225,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "app/core.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 222,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "app/main.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 256,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "app/telemetry.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 91,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "app/worker.py": {
+      "CONFIDENCE.HIGH": 3,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 10,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 2,
+      "SEVERITY.MEDIUM": 11,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 294,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "scripts/backup.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 18,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "scripts/remote_exec.py": {
+      "CONFIDENCE.HIGH": 3,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 3,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 30,
+      "nosec": 0,
+      "skipped_tests": 0
+    }
+  },
+  "results": [
+    {
+      "code": "55     with db() as c:\n56         total=c.execute('SELECT count(*) FROM deployments d '+where,args).fetchone()[0]\n57         rows=[dict(r) for r in c.execute('''SELECT d.id,d.project,d.email,d.status,d.created,d.updated,\n",
+      "col_offset": 24,
+      "end_col_offset": 61,
+      "filename": "app/admin.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 89,
+        "link": "https://cwe.mitre.org/data/definitions/89.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Possible SQL injection vector through string-based query construction.",
+      "line_number": 56,
+      "line_range": [
+        56
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b608_hardcoded_sql_expressions.html",
+      "test_id": "B608",
+      "test_name": "hardcoded_sql_expressions"
+    },
+    {
+      "code": "56         total=c.execute('SELECT count(*) FROM deployments d '+where,args).fetchone()[0]\n57         rows=[dict(r) for r in c.execute('''SELECT d.id,d.project,d.email,d.status,d.created,d.updated,\n58             p.name,p.owner_email,(p.active_release=d.id) active\n59             FROM deployments d JOIN projects p ON p.id=d.project '''+where+' ORDER BY d.created DESC,d.rowid DESC LIMIT ? OFFSET ?',(*args,limit,offset))]\n60     return {'total':total,'rows':rows,'offset':offset,'limit':limit}\n",
+      "col_offset": 41,
+      "end_col_offset": 68,
+      "filename": "app/admin.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 89,
+        "link": "https://cwe.mitre.org/data/definitions/89.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Possible SQL injection vector through string-based query construction.",
+      "line_number": 57,
+      "line_range": [
+        57,
+        58,
+        59
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b608_hardcoded_sql_expressions.html",
+      "test_id": "B608",
+      "test_name": "hardcoded_sql_expressions"
+    },
+    {
+      "code": "137         c.execute('INSERT INTO clients VALUES(?,?,?,?)',(cid,name,json.dumps(redirects),now()))\n138     return JSONResponse({'client_id':cid,'client_name':name,'redirect_uris':redirects,'grant_types':['authorization_code','refresh_token'],'response_types':['code'],'token_endpoint_auth_method':'none','client_id_issued_at':now()},201)\n139 \n",
+      "col_offset": 165,
+      "end_col_offset": 193,
+      "filename": "app/auth.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'none'",
+      "line_number": 138,
+      "line_range": [
+        138
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html",
+      "test_id": "B105",
+      "test_name": "hardcoded_password_string"
+    },
+    {
+      "code": "213     refresh=issue('refresh',a['email'],ttl=30*86400,client=client,scope=a['scope'],resource=RESOURCE)\n214     return JSONResponse({'access_token':access,'refresh_token':refresh,'token_type':'Bearer','expires_in':3600,'scope':a['scope']},headers={'Cache-Control':'no-store','Pragma':'no-cache'})\n215 \n",
+      "col_offset": 71,
+      "end_col_offset": 83,
+      "filename": "app/auth.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'Bearer'",
+      "line_number": 214,
+      "line_range": [
+        214
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html",
+      "test_id": "B105",
+      "test_name": "hardcoded_password_string"
+    },
+    {
+      "code": "57         fields={'status':status,'updated':now()}|extra\n58         c.execute('UPDATE deployments SET '+','.join(k+'=?' for k in fields)+' WHERE id=?',(*fields.values(),did))\n59 \n",
+      "col_offset": 18,
+      "end_col_offset": 43,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 89,
+        "link": "https://cwe.mitre.org/data/definitions/89.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Possible SQL injection vector through string-based query construction.",
+      "line_number": 58,
+      "line_range": [
+        58
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b608_hardcoded_sql_expressions.html",
+      "test_id": "B608",
+      "test_name": "hardcoded_sql_expressions"
+    },
+    {
+      "code": "63             with db() as c: c.execute(\"INSERT INTO worker VALUES('main',?) ON CONFLICT(id) DO UPDATE SET heartbeat=excluded.heartbeat\",(now(),))\n64         except Exception: pass\n65         time.sleep(5)\n",
+      "col_offset": 8,
+      "end_col_offset": 30,
+      "filename": "app/worker.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 64,
+      "line_range": [
+        64
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "85         log(did,'Installing dependencies and building in an isolated temporary container (timeout 300s).')\n86         opts=restricted(name='artifact-build-'+did,network=net.name,working_dir='/workspace',environment={'HOME':'/tmp','npm_config_cache':'/tmp/npm','CI':'true'},volumes={str(Path(HOST_DATA)/'releases'/did/'app'):{'bind':'/source','mode':'ro'}},tmpfs={'/workspace':'rw,nosuid,nodev,size=512m,uid=10001,gid=10001','/tmp':'rw,nosuid,nodev,size=128m,uid=10001,gid=10001'},labels={LABEL:'build','project':p['id']})\n87         opts.update(mem_limit='768m',memswap_limit='768m',nano_cpus=1_000_000_000)\n",
+      "col_offset": 113,
+      "end_col_offset": 119,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 86,
+      "line_range": [
+        86
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "85         log(did,'Installing dependencies and building in an isolated temporary container (timeout 300s).')\n86         opts=restricted(name='artifact-build-'+did,network=net.name,working_dir='/workspace',environment={'HOME':'/tmp','npm_config_cache':'/tmp/npm','CI':'true'},volumes={str(Path(HOST_DATA)/'releases'/did/'app'):{'bind':'/source','mode':'ro'}},tmpfs={'/workspace':'rw,nosuid,nodev,size=512m,uid=10001,gid=10001','/tmp':'rw,nosuid,nodev,size=128m,uid=10001,gid=10001'},labels={LABEL:'build','project':p['id']})\n87         opts.update(mem_limit='768m',memswap_limit='768m',nano_cpus=1_000_000_000)\n",
+      "col_offset": 139,
+      "end_col_offset": 149,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 86,
+      "line_range": [
+        86
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "85         log(did,'Installing dependencies and building in an isolated temporary container (timeout 300s).')\n86         opts=restricted(name='artifact-build-'+did,network=net.name,working_dir='/workspace',environment={'HOME':'/tmp','npm_config_cache':'/tmp/npm','CI':'true'},volumes={str(Path(HOST_DATA)/'releases'/did/'app'):{'bind':'/source','mode':'ro'}},tmpfs={'/workspace':'rw,nosuid,nodev,size=512m,uid=10001,gid=10001','/tmp':'rw,nosuid,nodev,size=128m,uid=10001,gid=10001'},labels={LABEL:'build','project':p['id']})\n87         opts.update(mem_limit='768m',memswap_limit='768m',nano_cpus=1_000_000_000)\n",
+      "col_offset": 314,
+      "end_col_offset": 320,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 86,
+      "line_range": [
+        86
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "93             if build.status!='running': raise ValueError('Build container stopped unexpectedly')\n94             result=build.exec_run(['cat','/tmp/build-result'])\n95             if result.exit_code==0:\n",
+      "col_offset": 41,
+      "end_col_offset": 60,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 94,
+      "line_range": [
+        94
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "128         for root,dirs,files in os.walk(source):\n129             os.chmod(root,0o755)\n130             for name in files:\n",
+      "col_offset": 12,
+      "end_col_offset": 32,
+      "filename": "app/worker.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 732,
+        "link": "https://cwe.mitre.org/data/definitions/732.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Chmod setting a permissive mask 0o755 on file (root).",
+      "line_number": 129,
+      "line_range": [
+        129
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b103_set_bad_file_permissions.html",
+      "test_id": "B103",
+      "test_name": "set_bad_file_permissions"
+    },
+    {
+      "code": "192         labels={LABEL:'gateway','project':pid,'traefik.enable':'true',f'traefik.http.routers.{r}.rule':f'Host(`{pid}.{APP_DOMAIN}`)',f'traefik.http.routers.{r}.entrypoints':'websecure',f'traefik.http.routers.{r}.tls.certresolver':'letsencrypt',f'traefik.http.routers.{r}.middlewares':'artifact-auth@docker',f'traefik.http.services.{r}.loadbalancer.server.port':'8080','traefik.docker.network':net.name}\n193         opts=restricted(name=name,network=net.name,labels=labels,volumes={str(Path(HOST_DATA)/'routes'/pid):{'bind':'/etc/nginx','mode':'ro'}},tmpfs={'/tmp':'rw,nosuid,nodev,size=16m,uid=10001,gid=10001'},restart_policy={'Name':'unless-stopped'})\n194         opts.update(mem_limit='32m',memswap_limit='32m',nano_cpus=250_000_000)\n",
+      "col_offset": 150,
+      "end_col_offset": 156,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 193,
+      "line_range": [
+        193
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "225         volumes={str(Path(HOST_DATA)/'releases'/did/'app'):{'bind':'/site' if p['runtime']=='static' else '/app','mode':'ro'}}\n226         opts=restricted(name='artifact-release-'+did,network=net.name,labels={LABEL:'release','project':pid,'release':did},volumes=volumes,tmpfs={'/tmp':'rw,nosuid,nodev,size=64m,uid=10001,gid=10001'},restart_policy={'Name':'unless-stopped'})\n227         if p['runtime']=='static':\n",
+      "col_offset": 146,
+      "end_col_offset": 152,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 226,
+      "line_range": [
+        226
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "232         else:\n233             opts.update(environment=decrypt_env(d.get('env_snapshot'))|{'PORT':'3000','HOST':'0.0.0.0','NODE_ENV':'production','HOME':'/tmp','npm_config_cache':'/tmp/npm'},working_dir='/app')\n234             runtime_container=client.containers.run(NODE,['npm','start'],**opts); port=3000\n",
+      "col_offset": 93,
+      "end_col_offset": 102,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 605,
+        "link": "https://cwe.mitre.org/data/definitions/605.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Possible binding to all interfaces.",
+      "line_number": 233,
+      "line_range": [
+        233
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b104_hardcoded_bind_all_interfaces.html",
+      "test_id": "B104",
+      "test_name": "hardcoded_bind_all_interfaces"
+    },
+    {
+      "code": "232         else:\n233             opts.update(environment=decrypt_env(d.get('env_snapshot'))|{'PORT':'3000','HOST':'0.0.0.0','NODE_ENV':'production','HOME':'/tmp','npm_config_cache':'/tmp/npm'},working_dir='/app')\n234             runtime_container=client.containers.run(NODE,['npm','start'],**opts); port=3000\n",
+      "col_offset": 134,
+      "end_col_offset": 140,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 233,
+      "line_range": [
+        233
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "232         else:\n233             opts.update(environment=decrypt_env(d.get('env_snapshot'))|{'PORT':'3000','HOST':'0.0.0.0','NODE_ENV':'production','HOME':'/tmp','npm_config_cache':'/tmp/npm'},working_dir='/app')\n234             runtime_container=client.containers.run(NODE,['npm','start'],**opts); port=3000\n",
+      "col_offset": 160,
+      "end_col_offset": 170,
+      "filename": "app/worker.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 233,
+      "line_range": [
+        233
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "263             try: runtime_container.remove(force=True)\n264             except Exception: pass\n265         log(did,'FAILED: '+message)\n",
+      "col_offset": 12,
+      "end_col_offset": 34,
+      "filename": "app/worker.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 264,
+      "line_range": [
+        264
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "5 \"\"\"\n6 import base64,json,os,subprocess,sys,time,uuid,zlib\n7 \n",
+      "col_offset": 0,
+      "end_col_offset": 51,
+      "filename": "scripts/remote_exec.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Consider possible security implications associated with the subprocess module.",
+      "line_number": 6,
+      "line_range": [
+        6
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess",
+      "test_id": "B404",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "10 def call(*args):\n11     p=subprocess.run(['orca',*args,'--environment',ENV,'--json'],capture_output=True,text=True)\n12     d=json.loads(p.stdout)\n",
+      "col_offset": 6,
+      "end_col_offset": 95,
+      "filename": "scripts/remote_exec.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 11,
+      "line_range": [
+        11
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "10 def call(*args):\n11     p=subprocess.run(['orca',*args,'--environment',ENV,'--json'],capture_output=True,text=True)\n12     d=json.loads(p.stdout)\n",
+      "col_offset": 6,
+      "end_col_offset": 95,
+      "filename": "scripts/remote_exec.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 11,
+      "line_range": [
+        11
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    }
+  ]
+}
