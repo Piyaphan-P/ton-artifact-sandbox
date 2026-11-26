@@ -11,17 +11,17 @@
 - ตัวอย่าง Node.js: https://node-demo.apps.piyaphan-p.tech
 - Hermes: https://hermes.piyaphan-p.tech
 
-แอปตัวอย่างเป็น private ต้องล็อกอินด้วย Google บัญชีที่ได้รับสิทธิ์ เจ้าของคือ piyaphan.po@gmail.com
+แอป private ต้องล็อกอินด้วย Google บัญชีที่ได้รับสิทธิ์ Admin คือ piyaphan.po@gmail.com ส่วน hello-world โอนเจ้าของเป็น piyaphan.p@infinitaskt.com แล้ว ตรวจเจ้าของและ visibility ปัจจุบันได้จาก Admin overview
 
 ## Whitelist และสิทธิ์
 
 1. ล็อกอิน Dashboard แล้วเปิด People & access
 2. กรอก Google email → Add to whitelist (ไม่มีการส่งอีเมลอัตโนมัติ)
 3. ไป Projects → เลือกแอป → Project settings → Project membership
-4. ใส่อีเมลเดียวกัน เลือก Viewer (ดู), Deployer (ดูและ deploy), หรือ Maintainer (รวมแก้ environment/visibility)
+4. Membership เป็นสิทธิ์ดูแอปเท่านั้น แม้ชื่อ role เดิมจะเป็น Deployer หรือ Maintainer ก็ deploy หรือแก้ค่าข้ามเจ้าของไม่ได้ กำหนดสิทธิ์ artifacts:read / artifacts:write / deployments:write รายบัญชีใน People & access
 5. Disable ในหน้า People ระงับบัญชี; Remove membership ถอนสิทธิ์เฉพาะแอป
 
-บัญชีใน whitelist สร้าง project ของตัวเองได้ อีเมลจาก Google/OAuth token เป็นเจ้าของอัตโนมัติ เฉพาะอีเมลเจ้าของเท่านั้นที่ deploy ทับ, rollback หรือแก้ environment/visibility ได้ แม้ platform owner ก็เขียนทับของคนอื่นไม่ได้ Membership ให้สิทธิ์ดูแอป ไม่ได้ให้เขียนทับข้ามเจ้าของ
+บัญชีใน whitelist ที่มี artifacts:write สร้าง project ของตัวเองได้ อีเมลจาก Google/OAuth token เป็นเจ้าของอัตโนมัติ เฉพาะอีเมลเจ้าของเท่านั้นที่ deploy ทับ, rollback หรือแก้ environment/visibility ได้ แม้ platform owner ก็เขียนทับของคนอื่นไม่ได้ Membership ให้สิทธิ์ดูแอป ไม่ได้ให้เขียนทับข้ามเจ้าของ
 
 ## Deploy จาก Dashboard
 
@@ -115,3 +115,5 @@ Admin permissions: `artifacts:read` allows reading own projects/logs; `artifacts
 Traffic เริ่มนับเมื่อเปิดฟีเจอร์ ไม่ได้สร้างข้อมูลย้อนหลัง เก็บ aggregate รายชั่วโมง 30 วันและเก็บข้อมูลกันนับซ้ำ 1 วัน ข้อมูล refresh ราว 15–30 วินาที CPU 100% หมายถึงหนึ่ง core; RAM/CPU เป็นค่า runtime container ปัจจุบัน ไม่รวม build/gateway เว็บ public ที่ไม่มี app session เป็น anonymous ไม่สามารถรู้ว่าเป็นใครหรือคำนวณ unique visitors ทั้งหมดได้ Requests รวม assets และนับหลัง request สิ้นสุด จึงไม่ใช่ pageviews และ WebSocket จะนับตอนปิด connection
 
 ระบบไม่เก็บ IP, URL/query strings, cookies หรือ tokens ใน traffic analytics Requests ที่ถูกปฏิเสธก่อนถึง app gateway และ internal health probes ไม่รวมในกราฟ การเก็บแบบ Docker log polling อาจขาดช่วงหาก log หมุนทิ้งระหว่าง worker หยุด จึงควรดูเวลาล่าสุดของ collector คู่กับกราฟ
+
+การจัดการผู้ใช้/permissions และหน้า Admin overview ต้องใช้ Google session บน Dashboard เท่านั้น token ของ harness ใช้เรียก API กลุ่ม Admin ไม่ได้ แม้ token จะเป็นของบัญชี Admin
